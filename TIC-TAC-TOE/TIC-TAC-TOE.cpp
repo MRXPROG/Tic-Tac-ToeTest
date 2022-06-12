@@ -73,11 +73,12 @@ void InfillGamerField(char** field, int& rows, int& colums, boolean& gamer) {
 
                 if ((row != rows)
                     && (column != colums)
-                    && (row != 2 && column != 2)
+                    
                     && (row != 1)
                     && (column != 1)
                     && (row != rows)
                     && (column != colums))
+
                 {
                     if ((field[(row - 1) + 1][(column - 1)] == 'X' && field[(row - 1) + 2][(column - 1)] == 'X') ||//ROW +
 
@@ -464,6 +465,7 @@ void InfillGamerField(char** field, int& rows, int& colums, boolean& gamer) {
                         }
                     }
                 }
+
 
                 break;
             }
@@ -1471,6 +1473,20 @@ bool ContinueGame() {
     return flag;
 }
 
+int Vvod(int& level, boolean& vvod) {
+    
+    while (vvod) {
+        cout << "Enter number of difficult 1 or 2 : ";
+        cin >> level;
+        if (level == 1 || level == 2) {
+            vvod = false;
+            break;
+        }
+        cout << "You enter wrong number, pls enter another";
+    }
+    return level;
+}
+
 
 int main()
 {
@@ -1478,9 +1494,11 @@ int main()
     int colums;
     int level;
 
+
     boolean gamer = false;
     boolean computer = false;
     boolean vvod = true;
+
     cout << "Enter rows: ";
     cin >> rows;
     cout << "Enter colums: ";
@@ -1490,34 +1508,33 @@ int main()
 
     while (true) {
 
-        FillField(field, rows, colums);
+        
 
         gamer = false;
 
         computer = false;
 
+        FillField(field, rows, colums);
+
         while (true) {
 
-            while (vvod) {
-                cout << "Enter number of difficult 1 or 2 : ";
-                cin >> level;
-                if (level == 1 || level == 2) {
-                    vvod = false;
-                    break;
-                }
-                cout << "You enter wrong number, pls enter another";
-            }
+            
+
+            Vvod(level, vvod);
            
             OutputField(field, rows, colums);
             InfillGamerField(field, rows, colums, gamer);
             if (gamer) {
                 cout << " You winner \n Be happy!!!" << endl;
+                vvod = true;
+                OutputField(field, rows, colums);
                 break;
             }
             if (level == 1) {
                 InFillComputerLevel1Field(field, rows, colums, computer);
                 if (computer) {
                     cout << "you lose" << endl;
+                    vvod = true;
                     OutputField(field, rows, colums);
                     break;
                 }
@@ -1526,6 +1543,7 @@ int main()
                 InFillComputerLevel2Field(field, rows, colums, computer);
                 if (computer) {
                     cout << "you lose" << endl;
+                    vvod = true;
                     OutputField(field, rows, colums);
                     break;
                 }
@@ -1533,8 +1551,10 @@ int main()
             
         }
         if (!ContinueGame()) {
+            FillField(field, rows, colums);
             break;
         }
+
     }
     DeleteField(field, rows, colums);
     return 0;
